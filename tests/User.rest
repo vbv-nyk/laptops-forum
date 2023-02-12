@@ -1,10 +1,23 @@
+GET  http://localhost:3000/Users/
+
+###
 POST http://localhost:3000/Users/signup 
 Content-Type: application/json
 
 {
-    "firstName" : "Vaibhav",
+    "firstName" : "Adithya",
     "lastName" : "Nayak",
-    "username": "vbvnyasdk",
+    "username": "adtnyk1",
     "password" : "abcd1234",
     "laptopsOwned" : ["63e902fe9487ed1f52be9fa6"]
+}
+
+### 
+
+PUT http://localhost:3000/Users/update/adtnyk1
+Content-Type: application/json
+
+{
+    "firstName": "vaibhav",
+    "password": "1235abcd"
 }
