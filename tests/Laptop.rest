@@ -1,0 +1,50 @@
+GET http://localhost:3000/Laptops/ HTTP/1.1
+
+###
+
+GET http://localhost:3000/Laptops/0 HTTP/1.1
+
+###
+
+GET http://localhost:3000/Laptops/63e8f66dba3ad9643cf830e5 HTTP/1.1
+
+###
+GET http://localhost:3000/Laptops/asda13sdas HTTP/1.1
+
+###
+
+POST http://localhost:3000/Laptops/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "name" : "Asus",
+    "price" : 10000,
+    "link" : "amazon.com"
+}
+
+###
+POST http://localhost:3000/Laptops/ HTTP/1.1
+Content-Type:  application/json
+
+{
+    "name" : "HP",
+    "price" : 600000,
+    "link": "amazon.in/hp-laptop",
+    "inStock": false
+}
+
+###
+
+PUT http://localhost:3000/Laptops/63e8f66dba3ad9643cf830e5 HTTP/1.1
+Content-Type:  application/json
+
+{
+    "name" : "HP",
+    "price" : 600000,
+    "link": "amazon.in/hp-laptop",
+    "inStock": false
+}
+
+###
+
+DELETE http://localhost:3000/Laptops/63e8f66dba3ad9643cf830e5 HTTP/1.1
