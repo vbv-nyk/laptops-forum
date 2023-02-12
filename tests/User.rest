@@ -1,1 +1,10 @@
 POST http://localhost:3000/Users/signup 
+Content-Type: application/json
+
+{
+    "firstName" : "Vaibhav",
+    "lastName" : "Nayak",
+    "username": "vbvnyasdk",
+    "password" : "abcd1234",
+    "laptopsOwned" : ["63e902fe9487ed1f52be9fa6"]
+}
