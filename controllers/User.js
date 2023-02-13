@@ -31,12 +31,12 @@ userRouter.post("/signup", async (req, res) => {
 });
 
 userRouter.post("/login", async (req, res) => {
-    const [username, password] = req.body;
-    const checkUsername = await User.find({ username });
-    if (!checkUsername.length)
+    const { username, password } = req.body;
+    const checkUsername = await User.findOne({ username });
+    if (!checkUsername.username)
         return res.send({ error: "Invalid username or password" });
-
-    const passMatch = bcrypt.compare(password, checkUsername.password);
+    console.log(checkUsername.password);
+    const passMatch = await bcrypt.compare(password, checkUsername.password);
     if (passMatch) {
         return res.send(checkUsername)
     } else {
