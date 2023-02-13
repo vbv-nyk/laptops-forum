@@ -30,6 +30,19 @@ userRouter.post("/signup", async (req, res) => {
     res.send(user);
 });
 
+userRouter.post("/login", async (req, res) => {
+    const [username, password] = req.body;
+    const checkUsername = await User.find({ username });
+    if (!checkUsername.length)
+        return res.send({ error: "Invalid username or password" });
+
+    const passMatch = bcrypt.compare(password, checkUsername.password);
+    if (passMatch) {
+        return res.send(checkUsername)
+    } else {
+        return res.send("Invalid username or password");
+    }
+})
 userRouter.put("/update/:username", async (req, res) => {
     const { username } = req.params;
     const { firstName, lastName, password, laptopsOwned } = req.body;

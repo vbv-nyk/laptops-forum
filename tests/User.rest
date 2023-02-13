@@ -18,6 +18,11 @@ PUT http://localhost:3000/Users/update/adtnyk1
 Content-Type: application/json
 
 {
-    "firstName": "vaibhav",
+    "firstName": "Vaibhav",
+    "lastName": "Nayak",
     "password": "1235abcd"
 }
+
+###
+
+POST http://localhost:3000/Users/login
