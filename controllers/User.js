@@ -1,6 +1,9 @@
 const express = require("express");
+const expressSession = require("express-session");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const checkLoggedIn = require("../middlewares/checkLoggedIn");
+const checkAuth = require("../middlewares/checkAuth");
 
 const userRouter = express.Router();
 
@@ -15,12 +18,13 @@ userRouter.get("/", async (req, res) => {
     res.send(user);
 })
 
-userRouter.post("/signup", async (req, res) => {
+userRouter.post("/signup", checkLoggedIn, async (req, res) => {
     const { firstName, username, lastName, password, laptopsOwned } = req.body;
     const checkUsername = await User.find({ username });
-    if (checkUsername.length) {
+    console.log(checkUsername);
+    if (checkUsername.length > 0) {
         return res.send({
-            error: "Username already exists",
+            error: "Username already taken",
         })
     }
     const hashedPassword = await bcrypt.hash(password, 8);
@@ -30,29 +34,31 @@ userRouter.post("/signup", async (req, res) => {
     res.send(user);
 });
 
-userRouter.post("/login", async (req, res) => {
+userRouter.post("/login", checkLoggedIn, async (req, res) => {
+
     const { username, password } = req.body;
     const checkUsername = await User.findOne({ username });
-    if (!checkUsername.username)
+    console.log(checkUsername);
+    if (!checkUsername)
         return res.send({ error: "Invalid username or password" });
-    console.log(checkUsername.password);
     const passMatch = await bcrypt.compare(password, checkUsername.password);
     if (passMatch) {
-        return res.send(checkUsername)
+        req.session.loggedIn = true;
+        req.session.username = checkUsername.username;
+        return res.send(req.session);
     } else {
         return res.send("Invalid username or password");
     }
 })
-userRouter.put("/update/:username", async (req, res) => {
+userRouter.put("/update/:username", checkAuth, async (req, res) => {
     const { username } = req.params;
     const { firstName, lastName, password, laptopsOwned } = req.body;
     const checkUsername = await User.findOne({ "username": username });
     console.log(checkUsername);
-    if (!checkUsername.username)
+    if (!checkUsername)
         return res.send({ error: "User not found" });
     const hashedPassword = await bcrypt.hash(password, 8);
-    const user = await User.findByIdAndUpdate(checkUsername._id, { firstName, username, lastName, "password": hashedPassword, laptopsOwned })
+    const user = await User.findByIdAndUpdate(checkUsername._id, { firstName, username, lastName, "password": hashedPassword, laptopsOwned });
     res.send(user);
 })
-
 module.exports = userRouter;

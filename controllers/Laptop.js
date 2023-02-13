@@ -1,22 +1,24 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const checkAuth = require("../middlewares/checkAuth");
 const Laptop = require("../models/Laptop");
 
 const LaptopRouter = express.Router();
 
-LaptopRouter.post("/", async (req, res) => {
-    console.log(req.body);
+LaptopRouter.post("/", checkAuth, async (req, res) => {
+    console.log(req.session);
     const { name, price, link, inStock } = req.body;
-    await Laptop.create({ name, price, link, inStock });
-    res.send({ name, price, link, inStock });
+    const createdBy = req.session.username;
+    const laptop = await Laptop.create({ name, price, link, inStock, createdBy });
+    res.send(laptop);
 })
 
-LaptopRouter.get("/", async (req, res) => {
+LaptopRouter.get("/", checkAuth, async (req, res) => {
     const Laptops = await Laptop.find({});
     res.send(Laptops);
 })
 
-LaptopRouter.get("/:id", async (req, res) => {
+LaptopRouter.get("/:id", checkAuth, async (req, res) => {
     const { id } = req.params;
     console.log(req.params);
     if (!mongoose.isValidObjectId(id)) {
@@ -32,7 +34,7 @@ LaptopRouter.get("/:id", async (req, res) => {
 });
 
 
-LaptopRouter.put("/:id", async (req, res) => {
+LaptopRouter.put("/:id", checkAuth, async (req, res) => {
     const { id } = req.params;
     console.log(req.params);
     const { name, price, link, inStock } = req.body;
@@ -48,7 +50,7 @@ LaptopRouter.put("/:id", async (req, res) => {
     res.send({ name: "No Laptop with this id" })
 });
 
-LaptopRouter.delete("/:id", async (req, res) => {
+LaptopRouter.delete("/:id", checkAuth, async (req, res) => {
     const { id } = req.params;
     if (!mongoose.isValidObjectId(id)) {
         return res.send({

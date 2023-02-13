@@ -9,6 +9,12 @@ const userRouter = require("./controllers/User");
 
 const app = express();
 
+app.use(session({
+    secret: process.env.USERLOGIN,
+    resave: false,
+    saveUninitialized: true,
+}))
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 mongoose.set('strictQuery', false);
@@ -18,7 +24,7 @@ app.use("/Laptops", LaptopRouter);
 app.use("/Users", userRouter);
 
 app.use("/", (req, res) => {
-    res.send("Hello world");
+    res.send({ error: "Not logged in yet" });
 })
 
 app.listen(process.env.PORT);

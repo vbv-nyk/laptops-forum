@@ -1,5 +1,6 @@
 GET  http://localhost:3000/Users/
 
+
 ###
 POST http://localhost:3000/Users/signup 
 Content-Type: application/json
@@ -18,7 +19,7 @@ PUT http://localhost:3000/Users/update/adtnyk1
 Content-Type: application/json
 
 {
-    "firstName": "Vaibhav",
+    "firstName": "Adithya",
     "lastName": "Nayak",
     "password": "1235abcd"
 }
